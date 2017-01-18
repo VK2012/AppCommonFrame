@@ -3,6 +3,8 @@
 
 目前项目代码还没完成，先立个flag，dragger2 上手难度大，而且代码不好管理，体量大增，只适合大型项目，所以不考虑加入进去。:P
 
+另外本项目里面还参考了另一个开源项目[MVPArms](https://github.com/JessYanCoding/MVPArms)的部分代码。
+
 框架特点
 
 1. 基于Google官网demo mvp设计模式
