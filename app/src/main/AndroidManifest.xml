@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.vk.libs.appcommontest">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+
+    <application
+        android:name=".gankio.MyApp"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/MyAppTheme">
+        <!--<activity-->
+        <!--android:name=".TestActivity"-->
+        <!--android:label="MainA"-->
+        <!--android:screenOrientation="portrait">-->
+        <!--<intent-filter>-->
+        <!--<action android:name="android.intent.action.MAIN"/>-->
+
+        <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+        <!--</intent-filter>-->
+        <!--</activity>-->
+        <activity
+            android:name=".test.NetworkActivity"
+            android:label="网络检查"/>
+        <activity
+            android:name=".gankio.mvp.launcher.LauncherActivity"
+            android:configChanges="keyboardHidden"
+            android:label="码云Demo"
+            android:theme="@style/Launcher">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".gankio.mvp.main.MainActivity">
+        </activity>
+    </application>
+
+</manifest>

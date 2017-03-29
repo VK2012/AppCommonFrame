@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/activity_main"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.vk.libs.appcommontest.gankio.mvp.main.MainActivity">
+
+
+    <FrameLayout
+        android:id="@+id/tabContent"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1"></FrameLayout>
+
+    <fragment
+        android:id="@+id/fragment_nav"
+        android:layout_width="match_parent"
+        android:name="com.vk.libs.appcommon.ui.extra.BottomNavFragment"
+        android:layout_height="48dp"/>
+
+    <!--<android.support.v4.app.FragmentTabHost-->
+        <!--android:id="@+id/fragmentTabHost"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+    <!--</android.support.v4.app.FragmentTabHost>-->
+
+</LinearLayout>
