@@ -10,7 +10,9 @@ import com.vk.libs.appcommontest.gankio.mvp.data.source.DataRepository;
 
 
 /**
- * Created by VK on 2017/2/7.
+ * Created by VK on 2017/2/7.<br/>
+ * 登陆页面
+ *
  */
 public class LoginActivity extends EventBusActivity {
 
