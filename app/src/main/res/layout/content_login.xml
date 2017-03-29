@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/login"
+                android:padding="24dp"
+                tools:context=".gankio.mvp.login.LoginActivity">
+
+    <View
+        android:id="@+id/padding"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_centerInParent="true"/>
+
+    <EditText
+        android:id="@+id/et_login_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/padding"
+        android:layout_marginTop="30dp"
+        android:singleLine="true"
+        android:drawableLeft="@drawable/icon_account"
+        android:drawablePadding="2dp"
+        android:hint="@string/login_username_hint"
+        />
+
+    <EditText
+        android:id="@+id/et_login_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_login_username"
+        android:drawableLeft="@drawable/icon_password"
+        android:drawablePadding="2dp"
+        android:hint="@string/login_password_hint"
+        android:singleLine="true"
+        android:inputType="numberPassword"
+        />
+
+    <Button
+        android:id="@+id/btn_login_signin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_login_password"
+        android:text="@string/login_signin"/>
+
+    <TextView
+        android:id="@+id/btn_login_forget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_login_signin"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"
+        android:text="@string/login_forget"/>
+
+    <TextView
+        android:id="@+id/tv_login_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:text="version 1.0"/>
+</RelativeLayout>

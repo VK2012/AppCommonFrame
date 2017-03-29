@@ -40,7 +40,7 @@ public class NetworkActivity extends AppCompatActivity {
                 str.append(" , ");
                 str.append(connectType.second);
                 str.append('\n');
-                str.append(NetworkUtil.isConnect(NetworkActivity.this));
+                str.append(NetworkUtil.isConnected(NetworkActivity.this));
 
                 if(connectType.first == NETWORK_CLASS_WIFI ){
                     WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);

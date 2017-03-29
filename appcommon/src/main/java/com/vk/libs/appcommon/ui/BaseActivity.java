@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
  * Contact with trh5176891@126.com
  */
 
-public abstract class BaseActivity extends AppCompatActivity{
+public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,5 +52,8 @@ public abstract class BaseActivity extends AppCompatActivity{
         refWatcher.watch(this);
     }
 
+    /**
+     * 在组件注入之后进行初始化
+     */
     protected abstract void initView();
 }

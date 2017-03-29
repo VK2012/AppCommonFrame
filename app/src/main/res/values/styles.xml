@@ -8,9 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="Launcher" parent="Theme.AppCompat.Light">
-        <item name="android:background">@drawable/mayun_splash</item>
+    <style name="Login" parent="Theme.AppCompat.Light">
         <item name="android:windowFullscreen">true</item>
+        <item name="android:screenOrientation">portrait</item>
         <item name="windowNoTitle">true</item>
     </style>
 
@@ -18,5 +18,11 @@
         <item name="android:screenOrientation">portrait</item>
         <item name="android:configChanges">keyboardHidden|orientation</item>
     </style>
+
+    <style name="NoActionBar" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:screenOrientation">portrait</item>
+        <item name="android:configChanges">keyboardHidden|orientation</item>
+    </style>
+
 
 </resources>

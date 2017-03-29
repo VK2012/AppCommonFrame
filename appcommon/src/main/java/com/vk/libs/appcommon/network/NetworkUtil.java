@@ -45,7 +45,7 @@ public final class NetworkUtil {
      * @param context
      * @return true:已连接;false:未连接
      */
-    public static boolean isConnect(Context context) {
+    public static boolean isConnected(Context context) {
         NetworkInfo networkInfo = getActiveNetworkInfo(context);
         if (networkInfo != null)
             return networkInfo.isConnected();

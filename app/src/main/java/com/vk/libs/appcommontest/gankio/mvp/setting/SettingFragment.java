@@ -1,5 +1,7 @@
 package com.vk.libs.appcommontest.gankio.mvp.setting;
 
+import android.view.View;
+
 import com.vk.libs.appcommon.ui.EventBusFragment;
 import com.vk.libs.appcommontest.R;
 
@@ -42,5 +44,10 @@ public class SettingFragment extends EventBusFragment implements SettingContract
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_setting;
+    }
+
+    @Override
+    protected void initWidget(View root) {
+
     }
 }

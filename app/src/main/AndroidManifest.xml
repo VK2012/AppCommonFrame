@@ -30,7 +30,7 @@
             android:name=".gankio.mvp.launcher.LauncherActivity"
             android:configChanges="keyboardHidden"
             android:label="码云Demo"
-            android:theme="@style/Launcher">
+            android:theme="@style/MyAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

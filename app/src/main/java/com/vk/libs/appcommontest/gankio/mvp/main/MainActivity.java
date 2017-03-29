@@ -13,10 +13,6 @@ import com.vk.libs.appcommontest.gankio.mvp.home.HomeFragment;
 import com.vk.libs.appcommontest.gankio.mvp.mine.MineFragment;
 import com.vk.libs.appcommontest.gankio.mvp.setting.SettingFragment;
 
-import butterknife.ButterKnife;
-
-import static com.vk.libs.appcommontest.R.id.tabContent;
-
 /**
  * Created by VK on 2017/1/19.
  * Contact with trh5176891@126.com<br/><br/>
@@ -42,13 +38,12 @@ public class MainActivity extends BaseActivity implements MainContract.IView {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.setDebug(true);
         setContentView(R.layout.activity_main);
     }
 
     @Override
     protected void initView() {
-        Log.d(TAG, "initView: "+tabContent);
+        Log.d(TAG, "initView: ");
         FragmentManager fragmentManager = getSupportFragmentManager();
         BottomNavFragment bottomNavFragment = (BottomNavFragment) fragmentManager.findFragmentById(R.id.fragment_nav);
         bottomNavFragment.setup(tabNames,tabIconRes,tabClass);

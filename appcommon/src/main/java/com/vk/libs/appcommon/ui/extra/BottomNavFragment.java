@@ -42,6 +42,11 @@ public class BottomNavFragment extends EventBusFragment {
     }
 
     @Override
+    protected void initWidget(View root) {
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (mRoot != null) {
             ViewGroup parent = (ViewGroup) mRoot.getParent();

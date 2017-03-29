@@ -12,7 +12,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by VK on 2017/1/13.
- * Contact with trh5176891@126.com
  */
 
 public abstract class EventBusFragment extends BaseFragment{

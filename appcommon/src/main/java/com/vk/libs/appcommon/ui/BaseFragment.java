@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.squareup.leakcanary.RefWatcher;
 import com.vk.libs.appcommon.base.BaseApp;
@@ -21,14 +22,19 @@ import butterknife.ButterKnife;
 public abstract class BaseFragment extends Fragment {
 
     protected View mRoot;
+
     protected Bundle mBundle;
+
     protected LayoutInflater mInflater;
+
+    protected Toast mToast;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBundle = getArguments();
         initBundle(mBundle);
+        initToast();
     }
 
     @Override
@@ -55,20 +61,33 @@ public abstract class BaseFragment extends Fragment {
         return mRoot;
     }
 
+    /**
+     * 视图组件绑定前的预处理
+     * @param root
+     */
     protected void onBindViewBefore(View root) {
         // ...
     }
 
+    /**
+     * 获取布局资源ID
+     * @return
+     */
     protected abstract int getLayoutId();
 
     protected void initBundle(Bundle bundle) {
 
     }
 
-    protected void initWidget(View root) {
+    /**
+     * 初始化视图组件
+     * @param root
+     */
+    protected abstract void initWidget(View root);
 
-    }
-
+    /**
+     * 初始化数据
+     */
     protected void initData() {
 
     }
@@ -77,9 +96,20 @@ public abstract class BaseFragment extends Fragment {
 
     }
 
+    private void initToast(){
+        mToast = Toast.makeText(getContext(),"",Toast.LENGTH_SHORT);
+    }
+
+    protected void showToast(String message){
+        mToast.setText(message);
+        mToast.show();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if(mToast != null)
+            mToast.cancel();
         RefWatcher refWatcher = BaseApp.getRefWatcher(getActivity());
         refWatcher.watch(this);
     }

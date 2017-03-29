@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">AppCommonProject</string>
+    <string name="login_username_hint">user name</string>
+    <string name="login_password_hint">password</string>
+    <string name="login_signin">Sign in</string>
+    <string name="login_forget">Forgot password?</string>
+    <string name="login_signin_show">Logining...</string>
 </resources>

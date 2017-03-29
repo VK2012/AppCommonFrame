@@ -1,5 +1,7 @@
 package com.vk.libs.appcommontest.gankio.mvp.mine;
 
+import android.view.View;
+
 import com.vk.libs.appcommon.eventbus.MessageEvent;
 import com.vk.libs.appcommon.ui.EventBusFragment;
 import com.vk.libs.appcommontest.R;
@@ -48,5 +50,10 @@ public class MineFragment extends EventBusFragment implements MineContract.IView
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_mine;
+    }
+
+    @Override
+    protected void initWidget(View root) {
+
     }
 }
