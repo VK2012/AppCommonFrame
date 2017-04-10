@@ -2,8 +2,6 @@ package com.vk.libs.appcommontest.gankio.mvp.data.source;
 
 import android.support.annotation.NonNull;
 
-import com.vk.libs.appcommontest.gankio.mvp.data.responsebody.LoginInfoEntity;
-
 
 /**
  * Created by VK on 2017/2/8.<br/>
@@ -12,9 +10,9 @@ import com.vk.libs.appcommontest.gankio.mvp.data.responsebody.LoginInfoEntity;
 
 public interface DataSource {
 
-    interface DataSourceCallback<T> {
+    interface DataSourceCallback {
 
-        void onAccessSuccess(T data);
+        void onAccessSuccess(Object data);
 
         void onAccessFail(String message);
     }
@@ -26,11 +24,11 @@ public interface DataSource {
      * @param password
      * @param loginCallback
      */
-    void login(@NonNull String username, @NonNull String password, @NonNull DataSourceCallback<LoginInfoEntity> loginCallback);
+    void login(int hashcode,@NonNull String username, @NonNull String password, @NonNull DataSourceCallback loginCallback);
 
 
     /**
      * 取消所有数据请求
      */
-    void cancelAll();
+    void cancelAll(int hashcode);
 }

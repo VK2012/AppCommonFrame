@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.vk.libs.appcommon.base.BaseApp;
 import com.vk.libs.appcommon.network.NetworkUtil;
-import com.vk.libs.appcommontest.gankio.mvp.data.responsebody.LoginInfoEntity;
 import com.vk.libs.appcommontest.gankio.mvp.data.source.local.LocalDataSource;
 import com.vk.libs.appcommontest.gankio.mvp.data.source.remote.RemoteDataSource;
 
@@ -23,9 +22,9 @@ public class DataRepository implements DataSource {
 
     private static DataRepository INSTANCE = null;
 
-    private final DataSource mLoginInfoLocalDataSource;
+    private final DataSource mLocalDataSource;
 
-    private final DataSource mLoginInfoRemoteDataSource;
+    private final DataSource mRemoteDataSource;
 
     /**
      * Marks the cache as invalid, to force an update the next time data is requested. This variable
@@ -35,8 +34,8 @@ public class DataRepository implements DataSource {
 
     // Prevent direct instantiation.
     private DataRepository(Context context) {
-        mLoginInfoRemoteDataSource = RemoteDataSource.getInstance();
-        mLoginInfoLocalDataSource = LocalDataSource.getInstance(context);
+        mRemoteDataSource = RemoteDataSource.getInstance();
+        mLocalDataSource = LocalDataSource.getInstance(context);
     }
 
     /**
@@ -52,7 +51,7 @@ public class DataRepository implements DataSource {
     }
 
     @Override
-    public void login(@NonNull String username, @NonNull String password, @NonNull DataSourceCallback<LoginInfoEntity> loginCallback) {
+    public void login(int hashcode,@NonNull String username, @NonNull String password, @NonNull DataSourceCallback loginCallback) {
         checkNotNull(username);
         checkNotNull(password);
 
@@ -62,15 +61,15 @@ public class DataRepository implements DataSource {
                 loginCallback.onAccessFail("network is unavailable");
                 return ;
             }
-//            mLoginInfoRemoteDataSource.login(username,password,loginCallback);
+            mRemoteDataSource.login(hashcode,username,password,loginCallback);
             Log.d(TAG, "login: test mode");
-            loginCallback.onAccessSuccess(new LoginInfoEntity());
+//            loginCallback.onAccessSuccess(new LoginInfoEntity());
         }
     }
 
 
     @Override
-    public void cancelAll() {
-        mLoginInfoRemoteDataSource.cancelAll();
+    public void cancelAll(int hashcode) {
+        mRemoteDataSource.cancelAll(hashcode);
     }
 }

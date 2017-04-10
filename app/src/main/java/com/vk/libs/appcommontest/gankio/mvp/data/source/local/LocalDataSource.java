@@ -3,7 +3,6 @@ package com.vk.libs.appcommontest.gankio.mvp.data.source.local;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.vk.libs.appcommontest.gankio.mvp.data.responsebody.LoginInfoEntity;
 import com.vk.libs.appcommontest.gankio.mvp.data.source.DataSource;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -30,13 +29,13 @@ public class LocalDataSource implements DataSource {
     }
 
     @Override
-    public void login(@NonNull String username, @NonNull String password, @NonNull DataSourceCallback<LoginInfoEntity> loginCallback) {
+    public void login(int hashcode,@NonNull String username, @NonNull String password, @NonNull DataSourceCallback loginCallback) {
 
     }
 
 
     @Override
-    public void cancelAll() {
+    public void cancelAll(int hashcode) {
 
     }
 
