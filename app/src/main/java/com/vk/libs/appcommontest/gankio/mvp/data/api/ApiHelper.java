@@ -8,12 +8,14 @@ import android.util.SparseArray;
 import com.google.gson.Gson;
 import com.vk.libs.appcommon.base.BaseApp;
 import com.vk.libs.appcommon.cache.sharedpreference.SharedPreferenceHelper;
-import com.vk.libs.appcommontest.gankio.mvp.data.requestbody.ReqBody;
 import com.vk.libs.appcommontest.gankio.mvp.data.source.DataSource;
 
-import java.util.List;
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,7 +23,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
-import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Url;
 
@@ -70,6 +71,7 @@ public class ApiHelper {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
+                .client(genericClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         mApiService = retrofit.create(ApiService.class);
@@ -94,13 +96,13 @@ public class ApiHelper {
      * @param <V> 响应体范型
      * @return
      */
-    public <T, V> int httpPost(String url, T param, Class<V> targetCls, DataSource.DataSourceCallback callback) {
+    public <T,V> int httpPost(String url, T param, Class<V> targetCls, DataSource.DataSourceCallback callback) {
         int reqId = -1;
         if (check()) {
             reqId = num.getAndIncrement();
-            TaskWrapper<T, V> taskWrapper =
-                    new TaskWrapper<>(param, callback);
-            Call<Result<V>> call = mApiService.doPost(url,taskWrapper.getBody());
+            TaskWrapper<T,V> taskWrapper =
+                    new TaskWrapper<>(param,targetCls, callback);
+            Call<Result> call = mApiService.doPost(url,taskWrapper.getBody());
             mCallArray.append(reqId, call);
             taskWrapper.run(call);
         } else
@@ -108,98 +110,213 @@ public class ApiHelper {
         return reqId;
     }
 
-    /**
-     * http get方式请求
-     * @param url 请求url
-     * @param param 请求参数
-     * @param targetCls 期望的响应结果类型，不能为null
-     * @param callback 结果回调
-     * @param <T> 请求体范型
-     * @param <V> 响应体范型
-     * @return
-     */
-    public <T, V> int httpGet(String url, T param, Class<V> targetCls, DataSource.DataSourceCallback callback) {
+    public <T,V> int httpPost2(String url, T param, Class<V> targetCls, DataSource.DataSourceCallback callback) {
         int reqId = -1;
         if (check()) {
             reqId = num.getAndIncrement();
-            Call<Result<V>> call = mApiService.doGet(url);
+            TaskWrapper<T,V> taskWrapper =
+                    new TaskWrapper<>(param,targetCls, callback);
+            Call<Result> call = mApiService.doPost(url,taskWrapper.getBody());
             mCallArray.append(reqId, call);
-            TaskWrapper<T, V> taskWrapper =
-                    new TaskWrapper<>(param, callback);
-            taskWrapper.run(call);
+            taskWrapper.run2(call);
         } else
             callback.onAccessFail("Server ip can not be null");
         return reqId;
     }
+
+    public <T,V> int httpPostSp(String url, T param, Class<V> targetCls, DataSource.DataSourceCallback callback) {
+        int reqId = -1;
+        if (check()) {
+            reqId = num.getAndIncrement();
+            TaskWrapper<T,V> taskWrapper =
+                    new TaskWrapper<>(param,targetCls, callback);
+            Call<Object> call = mApiService.doPostSp(url,taskWrapper.getBody());
+            mCallArray.append(reqId, call);
+            taskWrapper.run3(call);
+        } else
+            callback.onAccessFail("Server ip can not be null");
+        return reqId;
+    }
+
+//    /**
+//     * http get方式请求
+//     * @param url 请求url
+//     * @param param 请求参数
+//     * @param targetCls 期望的响应结果类型，不能为null
+//     * @param callback 结果回调
+//     * @param <T> 请求体范型
+//     * @param <V> 响应体范型
+//     * @return
+//     */
+//    public <T, V> int httpGet(String url, T param, Class<V> targetCls, DataSource.DataSourceCallback callback) {
+//        int reqId = -1;
+//        if (check()) {
+//            reqId = num.getAndIncrement();
+//            Call<Result<V>> call = mApiService.doGet(url);
+//            mCallArray.append(reqId, call);
+//            TaskWrapper<T, V> taskWrapper =
+//                    new TaskWrapper<>(param, callback);
+//            taskWrapper.run(call);
+//        } else
+//            callback.onAccessFail("Server ip can not be null");
+//        return reqId;
+//    }
 
     /**
      * 任务包装类
      * @param <T> 请求体
-     * @param <V> 响应体
      */
-    private class TaskWrapper<T, V> {
+    private class TaskWrapper<T,V> {
         /**请求体，主要用于post*/
         private RequestBody body;
         /**结果返还的callback*/
         private DataSource.DataSourceCallback callback;
-
-        private TaskWrapper(T param, @NonNull DataSource.DataSourceCallback callback) {
+        private Class<V> targetCls;
+        private Gson gson = new Gson();
+        private TaskWrapper(T param,Class<V>  targetCls, @NonNull DataSource.DataSourceCallback callback) {
             this.callback = checkNotNull(callback);
+            this.targetCls = targetCls;
             if (param == null)
                 return;
-            ReqBody<T> reqBody = new ReqBody<>();
-            reqBody.setParam(param);
+//            ReqBody<T> reqBody = new ReqBody<>();
+//            reqBody.setParam(param);
+
+//            LoginInfoReqParam loginInfoReqParam = new LoginInfoReqParam("leileima",null);
             // TODO: 2017/3/30  还需要配置timestamp,token,security三个参数值
-            Gson gson = new Gson();
-            body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), gson.toJson(reqBody));
+//            FormBody formBody = new FormBody.Builder().build();
+            body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), gson.toJson(param));
         }
 
         private RequestBody getBody() {
             return body;
         }
 
-        private void run(Call<Result<V>> call) {
-            call.enqueue(new Callback<Result<V>>() {
+        private void run(Call<Result> call) {
+            call.enqueue(new Callback<Result>() {
                 @Override
-                public void onResponse(Call<Result<V>> call, Response<Result<V>> response) {
-                    Result<V> result = response.body();
-                    if (result.getResult().equals("success"))
-                        callback.onAccessSuccess(result.getData());
+                public void onResponse(Call<Result> call, Response<Result> response) {
+                    if(!response.isSuccessful()) {
+                        callback.onAccessFail("服务器访问异常" + response.code());
+                        return;
+                    }
+
+                    Result result = response.body();
+                    if (result != null&&"SUCCESS".equals(result.getCode())) {
+//                        V obj = gson.fromJson(result.getData().toString(),targetCls);
+//                        Log.d("tag",""+obj);
+                        String jj = gson.toJson(result.getData());
+                        V obj = gson.fromJson(jj,targetCls);
+                        Log.d("vkvk", jj+" \n"+obj.toString());
+                        if(obj == null)
+                            callback.onAccessFail("数据解析异常");
+                        else
+                            callback.onAccessSuccess(obj);
+                    }
                     else
                         callback.onAccessFail(result.getMessage());
                 }
 
                 @Override
-                public void onFailure(Call<Result<V>> call, Throwable t) {
-                    callback.onAccessFail("request fail");
+                public void onFailure(Call<Result> call, Throwable t) {
+                    callback.onAccessFail("request fail "+t.getMessage());
+                }
+            });
+        }
+
+        private void run2(Call<Result> call) {
+            call.enqueue(new Callback<Result>() {
+                @Override
+                public void onResponse(Call<Result> call, Response<Result> response) {
+                    if(!response.isSuccessful()) {
+                        callback.onAccessFail("服务器访问异常" + response.code());
+                        return;
+                    }
+
+                    Result result = response.body();
+                    if (result.getCode().equals("SUCCESS")) {
+//                        V obj = gson.fromJson(result.getData().toString(),targetCls);
+//                        Log.d("tag",""+obj);
+                        String jj = gson.toJson(result.getData());
+//                        V obj = gson.fromJson(jj,targetCls);
+                        Log.d("vkvk", jj+" \n");
+                        if(jj == null)
+                            callback.onAccessFail("数据解析异常");
+                        else
+                            callback.onAccessSuccess(jj);
+                    }
+                    else
+                        callback.onAccessFail(result.getMessage());
+                }
+
+                @Override
+                public void onFailure(Call<Result> call, Throwable t) {
+                    callback.onAccessFail("request fail "+t.getMessage());
+                }
+            });
+        }
+
+        private void run3(Call<Object> call) {
+            call.enqueue(new Callback<Object>() {
+                @Override
+                public void onResponse(Call<Object> call, Response<Object> response) {
+                    if(!response.isSuccessful()) {
+                        callback.onAccessFail("服务器访问异常" + response.code());
+                        return;
+                    }
+//                        V obj = gson.fromJson(result.getData().toString(),targetCls);
+//                        Log.d("tag",""+obj);
+                        String jj = gson.toJson(response.body());
+                        V obj = gson.fromJson(jj,targetCls);
+                        Log.d("vkvk", jj+" \n");
+                        if(jj == null)
+                            callback.onAccessFail("数据解析异常");
+                        else
+                            callback.onAccessSuccess(obj);
+
+                }
+
+                @Override
+                public void onFailure(Call<Object> call, Throwable t) {
+                    callback.onAccessFail("request fail "+t.getMessage());
                 }
             });
         }
     }
 
-    /**
-     * 根据请求id集，取消目标请求集，旨在释放资源
-     * @param reqIds 请求id集合
-     */
-    public void cancelAll(List<Integer> reqIds) {
-        if (reqIds != null && reqIds.size() > 0) {
-            for (Integer id : reqIds) {
-                Call call = mCallArray.get(id);
-                if (call != null) {
-                    call.cancel();
-                    mCallArray.remove(id);
-                }
-            }
-        }
+
+    public static OkHttpClient genericClient() {
+        OkHttpClient httpClient = new OkHttpClient.Builder()
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public okhttp3.Response intercept(Chain chain) throws IOException {
+                        Request request = chain.request()
+                                .newBuilder()
+                                .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+                                .addHeader("Accept-Encoding", "gzip, deflate")
+                                .addHeader("Connection", "keep-alive")
+                                .addHeader("Accept", "*/*")
+                                .addHeader("Cookie", "add cookies here")
+                                .build();
+                        return chain.proceed(request);
+                    }
+
+                })
+                .build();
+
+        return httpClient;
     }
 
     interface ApiService {
 
         @POST
-        <T> Call<Result<T>> doPost(@Url String url, @Body RequestBody body);
+        Call<Result> doPost(@Url String url, @Body RequestBody body);
 
-        @GET
-        <T> Call<Result<T>> doGet(@Url String url);
+        @POST
+        Call<Object> doPostSp(@Url String url, @Body RequestBody body);
+
+
+//        @GET
+//        <T extends Result> Call<T> doGet(@Url String url);
 
     }
 }

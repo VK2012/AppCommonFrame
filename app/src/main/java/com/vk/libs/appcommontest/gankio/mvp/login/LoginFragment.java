@@ -1,20 +1,21 @@
 package com.vk.libs.appcommontest.gankio.mvp.login;
 
-import android.content.Intent;
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.vk.libs.appcommon.ui.EventBusFragment;
 import com.vk.libs.appcommontest.R;
 import com.vk.libs.appcommontest.gankio.mvp.data.responsebody.LoginInfoEntity;
-import com.vk.libs.appcommontest.gankio.mvp.main.MainActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -36,11 +37,20 @@ public class LoginFragment extends EventBusFragment implements LoginContract.IVi
     @BindView(R.id.et_login_password)
     EditText et_login_password;
 
+    @BindView(R.id.et_login_pic_code)
+    EditText et_login_pic_code;
+
     @BindView(R.id.tv_login_version)
     TextView tv_login_version;
 
     @BindView(R.id.btn_login_signin)
     Button btn_login_signin;
+
+    @BindView(R.id.iv_verify_code)
+    ImageView iv_verify_code;
+
+
+
 
     public static LoginFragment newInstance(){
         Bundle arguments = new Bundle();
@@ -68,8 +78,9 @@ public class LoginFragment extends EventBusFragment implements LoginContract.IVi
         mPresenter.saveToken(loginInfoEntity);
 
         //进入主界面
-        startActivity(new Intent(getActivity(), MainActivity.class));
-        getActivity().finish();
+//        startActivity(new Intent(getActivity(), MainActivity.class));
+//        getActivity().finish();
+        showMessage("登录成功!\n"+loginInfoEntity.toString());
     }
 
     /**
@@ -79,6 +90,16 @@ public class LoginFragment extends EventBusFragment implements LoginContract.IVi
     @Override
     public void loginFail(String message) {
         closeLogin(message);
+    }
+
+    @Override
+    public Context getViewContext() {
+        return getContext();
+    }
+
+    @Override
+    public void updatePic(Bitmap bitmap) {
+        iv_verify_code.setImageBitmap(bitmap);
     }
 
     @Override
@@ -92,7 +113,7 @@ public class LoginFragment extends EventBusFragment implements LoginContract.IVi
      */
     @Override
     public void showLoading(String message) {
-
+        showProgressDialog(message);
     }
 
     /**
@@ -103,6 +124,7 @@ public class LoginFragment extends EventBusFragment implements LoginContract.IVi
     public void hideLoading(String message) {
         if(!TextUtils.isEmpty(message))
             showMessage(message);
+        cancelProgressDialog();
     }
 
     @Override
@@ -139,9 +161,15 @@ public class LoginFragment extends EventBusFragment implements LoginContract.IVi
     void doLogin(){
         Log.d(TAG, "doLogin: ");
         String username = et_login_username.getText().toString().trim();
-        String password = et_login_password.getText().toString();
+        String password = et_login_password.getText().toString().trim();
+        String picCode=  et_login_pic_code.getText().toString().trim();
+        mPresenter.login(username,password,picCode);
+    }
 
-        mPresenter.login(username,password);
+    @OnClick(R.id.iv_verify_code)
+    void doGetVerifyCode(){
+        Log.d(TAG, "doGetVerifyCode: ");
+        mPresenter.getVerifyCode();
     }
 
     /**

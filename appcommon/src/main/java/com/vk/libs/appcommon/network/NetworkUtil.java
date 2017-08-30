@@ -9,8 +9,6 @@ import android.util.Pair;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import retrofit2.Retrofit;
-
 /**
  * Created by VK on 2016/12/12.
  * 网络辅助类,相关权限：permission:android.permission.READ_PHONE_STATE,android.permission.ACCESS_NETWORK_STATE
@@ -61,7 +59,6 @@ public final class NetworkUtil {
     private static NetworkInfo getActiveNetworkInfo(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        Retrofit.Builder s;
         return networkInfo;
     }
 

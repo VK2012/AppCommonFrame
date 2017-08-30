@@ -29,14 +29,20 @@ public class LocalDataSource implements DataSource {
     }
 
     @Override
-    public void login(int hashcode,@NonNull String username, @NonNull String password, @NonNull DataSourceCallback loginCallback) {
+    public void login(@NonNull String username, @NonNull String password,@NonNull String picCode,@NonNull String salt, @NonNull DataSourceCallback loginCallback) {
 
     }
-
 
     @Override
-    public void cancelAll(int hashcode) {
+    public void getVerifyCode(String type, String imei, @NonNull DataSourceCallback loginCallback) {
 
     }
+
+    @Override
+    public void getNewSalt(String account, @NonNull DataSourceCallback loginCallback) {
+
+    }
+
+
 
 }

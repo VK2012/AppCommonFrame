@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.vk.libs.appcommontest.gankio.mvp.main.MainActivity;
+import com.vk.libs.appcommontest.gankio.mvp.login.LoginActivity;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,7 +14,7 @@ import rx.functions.Action1;
 
 public class LauncherActivity extends AppCompatActivity {
 
-    public static final int TIMEOUT = 3;
+    public static final int TIMEOUT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,7 @@ public class LauncherActivity extends AppCompatActivity {
     }
 
     private void jumpMain(){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }

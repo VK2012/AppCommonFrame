@@ -6,6 +6,12 @@ import android.util.Log;
 
 import com.vk.libs.appcommon.base.BaseApp;
 import com.vk.libs.appcommon.network.NetworkUtil;
+import com.vk.libs.appcommontest.gankio.mvp.data.requestbody.LoginInfoReqParam;
+import com.vk.libs.appcommontest.gankio.mvp.data.requestbody.SaltReqParam;
+import com.vk.libs.appcommontest.gankio.mvp.data.requestbody.VerifyCodeReqParam;
+import com.vk.libs.appcommontest.gankio.mvp.data.responsebody.EmptyEntity;
+import com.vk.libs.appcommontest.gankio.mvp.data.responsebody.LoginInfoEntity;
+import com.vk.libs.appcommontest.gankio.mvp.data.responsebody.SaltEntity;
 import com.vk.libs.appcommontest.gankio.mvp.data.source.local.LocalDataSource;
 import com.vk.libs.appcommontest.gankio.mvp.data.source.remote.RemoteDataSource;
 
@@ -24,7 +30,7 @@ public class DataRepository implements DataSource {
 
     private final DataSource mLocalDataSource;
 
-    private final DataSource mRemoteDataSource;
+    private final RemoteDataSource mRemoteDataSource;
 
     /**
      * Marks the cache as invalid, to force an update the next time data is requested. This variable
@@ -51,7 +57,7 @@ public class DataRepository implements DataSource {
     }
 
     @Override
-    public void login(int hashcode,@NonNull String username, @NonNull String password, @NonNull DataSourceCallback loginCallback) {
+    public void login(@NonNull String username, @NonNull String password,@NonNull String picCode, @NonNull String salt, @NonNull DataSourceCallback loginCallback) {
         checkNotNull(username);
         checkNotNull(password);
 
@@ -61,15 +67,31 @@ public class DataRepository implements DataSource {
                 loginCallback.onAccessFail("network is unavailable");
                 return ;
             }
-            mRemoteDataSource.login(hashcode,username,password,loginCallback);
+            mRemoteDataSource.httpPostSp(RemoteDataSource.URL_LOGIN, new LoginInfoReqParam(username, password,picCode,salt),LoginInfoEntity.class,loginCallback);
             Log.d(TAG, "login: test mode");
 //            loginCallback.onAccessSuccess(new LoginInfoEntity());
         }
     }
 
+    @Override
+    public void getVerifyCode(String type, String imei, @NonNull DataSourceCallback callback) {
+        if(!NetworkUtil.isConnected(BaseApp.getInstance())){
+            Log.d(TAG, "login: network is unavailable");
+            callback.onAccessFail("network is unavailable");
+            return ;
+        }
+        mRemoteDataSource.httpPost2(RemoteDataSource.URL_GET_VERIFY_CODE, new VerifyCodeReqParam(type, imei),EmptyEntity.class,callback);
+    }
 
     @Override
-    public void cancelAll(int hashcode) {
-        mRemoteDataSource.cancelAll(hashcode);
+    public void getNewSalt(String account, @NonNull DataSourceCallback callback) {
+        if(!NetworkUtil.isConnected(BaseApp.getInstance())){
+            Log.d(TAG, "login: network is unavailable");
+            callback.onAccessFail("network is unavailable");
+            return ;
+        }
+        mRemoteDataSource.httpPost(RemoteDataSource.URL_GET_SALT,  new SaltReqParam(account),SaltEntity.class,callback);
     }
+
+
 }

@@ -1,5 +1,6 @@
 package com.vk.libs.appcommon.ui;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import com.squareup.leakcanary.RefWatcher;
@@ -15,6 +16,8 @@ import org.greenrobot.eventbus.ThreadMode;
  */
 
 public abstract class EventBusFragment extends BaseFragment{
+
+    protected  ProgressDialog progressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,4 +35,15 @@ public abstract class EventBusFragment extends BaseFragment{
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUIMessageEvent(MessageEvent messageEvent){};
+
+    protected void showProgressDialog(String text) {
+        cancelProgressDialog();
+        progressDialog = ProgressDialog.show(getActivity(), "", text, false, true);
+    }
+
+    protected void cancelProgressDialog() {
+        if ((progressDialog != null) && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+    }
 }

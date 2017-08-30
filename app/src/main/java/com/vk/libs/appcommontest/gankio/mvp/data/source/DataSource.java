@@ -24,11 +24,17 @@ public interface DataSource {
      * @param password
      * @param loginCallback
      */
-    void login(int hashcode,@NonNull String username, @NonNull String password, @NonNull DataSourceCallback loginCallback);
+    void login(@NonNull String username, @NonNull String password,@NonNull String picCode,@NonNull String salt, @NonNull DataSourceCallback loginCallback);
 
 
     /**
-     * 取消所有数据请求
+     * 获取图片验证码
      */
-    void cancelAll(int hashcode);
+    void getVerifyCode(String type,String imei,@NonNull DataSourceCallback loginCallback);
+
+    /***
+     * 拿盐
+     * @param account
+     */
+    void getNewSalt(String account,@NonNull DataSourceCallback loginCallback);
 }
