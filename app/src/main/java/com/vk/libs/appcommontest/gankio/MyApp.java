@@ -12,6 +12,6 @@ public class MyApp extends BaseApp {
     @Override
     public void onCreate() {
         super.onCreate();
-        SharedPreferenceHelper.putStringInDefault(this, ApiHelper.BASE_URL,"http://172.31.52.15:8080");
+        SharedPreferenceHelper.putStringInDefault(this, ApiHelper.BASE_URL,"http://189.11.52.15:8080");
     }
 }
